@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Requirements - node.js, docker.
+Requirements - node.js, docker, DB passwords
 To spin up the app, use the command: `docker-compose up`
 
 ## Run Tests
