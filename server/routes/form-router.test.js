@@ -41,7 +41,7 @@ describe("POST /", () => {
 
     const response = await request(app).post("/api/form").send(newItem);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("customer_id", newItem.customer_id);
   });
 
