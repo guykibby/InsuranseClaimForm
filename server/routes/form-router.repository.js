@@ -29,9 +29,10 @@ module.exports = {
           consent,
         ]
       );
+
       return newItem.rows[0];
     } catch (err) {
-      throw err
+      throw err;
     }
   },
   allClaims: async () => {
