@@ -108,9 +108,8 @@ const InputForm = () => {
         onChange={(e) => setConditionClaimedFor(e.target.value)}
         required
       />
-
       <label htmlFor="startDate">Beginning of Observed Condition</label>
-      <div className="datePicker">
+      <div className="datePicker" data-testid="datePicker">
         <DatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
