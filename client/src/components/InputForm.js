@@ -114,6 +114,7 @@ const InputForm = () => {
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           maxDate={new Date()}
+          id={new Date()}
         />
       </div>
       <label htmlFor="symptomDetails">Symptom Details</label>
