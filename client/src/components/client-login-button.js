@@ -7,14 +7,14 @@ export const LoginClient = () => {
   const handleLogin = async () => {
     await loginWithRedirect({
       appState: {
-        returnTo: "/inputForm",
+        returnTo: "/dashboard",
       },
     });
   };
 
   return (
     <button className="button__login" onClick={handleLogin}>
-      Log In To Post A Claim
+      Customer Login
     </button>
   );
 };
