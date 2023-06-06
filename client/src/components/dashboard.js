@@ -16,7 +16,7 @@ const Dashboard = () => {
       setIsLoading(true);
       const accessToken = await getAccessTokenSilently();
       const response = await fetch(
-        `${process.env.REACT_APP_API_SERVER_URL}/api/form`,
+        `${process.env.REACT_APP_API_SERVER_URL}/api/form/admin`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -25,9 +25,30 @@ const Dashboard = () => {
         }
       );
 
-      // if (!response.ok) {
+      // if response status is 403
+      if (response.status === 403) {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_SERVER_URL}/api/form/user`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const jsonData = await response.json();
+        setIsAdmin(false);
+        setIsLoading(false);
+        setClaims(jsonData);
+      }
+      // else if (!response.ok) {
+      //   setHasError(true);
+      //   setIsLoading(false);
+      //   return;
+      // }
 
       const jsonData = await response.json();
+      setIsAdmin(true);
       setIsLoading(false);
       setClaims(jsonData);
     } catch (err) {

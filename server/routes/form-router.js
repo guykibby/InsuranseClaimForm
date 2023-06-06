@@ -8,7 +8,7 @@ const {
 
 const formRepository = require("./form-router.repository");
 
-formRouter.get("/", checkJwt, checkScopes, async (req, res) => {
+formRouter.get("/admin", checkJwt, checkScopes, async (req, res) => {
   try {
     const allClaims = await formRepository.allClaims();
     res.json(allClaims);
