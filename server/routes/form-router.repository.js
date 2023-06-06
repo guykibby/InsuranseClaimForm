@@ -35,8 +35,21 @@ module.exports = {
       throw err;
     }
   },
-  allClaims: async () => {
-    const allClaims = await pool.query("SELECT * FROM Claims");
+
+  allClaimsForAdmin: async () => {
+    const allClaims = await pool.query(
+      "SELECT * FROM Claims WHERE status = 'submitted' OR status = 'in progress'"
+    );
     return allClaims.rows;
+  },
+
+  allClaimsForUser: async (auth0ID) => {
+    const userClaims = await pool.query(
+      `SELECT Claims.* FROM Claims 
+      JOIN Users ON Claims.customer_id = Users.CustomerID
+      WHERE (Users.Auth0ID = $1)`,
+      [auth0ID]
+    );
+    return userClaims.rows;
   },
 };

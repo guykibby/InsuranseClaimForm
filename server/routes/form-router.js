@@ -1,23 +1,30 @@
 const express = require("express");
 const formRouter = express.Router();
 const dataValidate = require("../middleware/dataValidation");
-const {
-  checkJwt,
-  checkScopes,
-} = require("../middleware/authorizationMiddleware");
-
+const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
 
-formRouter.get("/admin", checkJwt, checkScopes, async (req, res) => {
+const checkJwt = auth();
+
+// Login into Auth0 with client@blablabla.com ClientPassword1
+
+// Get dashboard route
+formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
   try {
-    const allClaims = await formRepository.allClaims();
-    res.json(allClaims);
+    if (req.auth.payload.permissions.includes("admin:claims")) {
+      const adminClaims = await formRepository.allClaimsForAdmin();
+      res.json({ claims: adminClaims, role: "Admin" });
+    } else {
+      const auth0ID = req.auth.payload.sub;
+      const userClaims = await formRepository.allClaimsForUser(auth0ID);
+      res.json({ claims: userClaims, role: null });
+    }
   } catch (err) {
     next(err);
   }
 });
 
-// create a post route
+// post claim route
 formRouter.post("/", dataValidate, async (req, res, next) => {
   try {
     const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
