@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
-import EditClaim from "./editClaim";
 import { useAuth0 } from "@auth0/auth0-react";
+import AdminDash from "./AdminDash";
+import ClientDash from "./ClientDash";
+
 const Dashboard = () => {
   const { user } = useAuth0();
   const [claims, setClaims] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  console.log(user);
+  const { getAccessTokenSilently } = useAuth0();
+
   const getClaims = async () => {
     try {
       setIsLoading(true);
+      const accessToken = await getAccessTokenSilently();
       const response = await fetch(
-        `${process.env.REACT_APP_API_SERVER_URL}/api/form`
+        `${process.env.REACT_APP_API_SERVER_URL}/api/form`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
+
+      // if (!response.ok) {
+
       const jsonData = await response.json();
       setIsLoading(false);
       setClaims(jsonData);
@@ -25,34 +39,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     getClaims();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   return (
     <>
-      <h2>Total Claims = {claims.length}</h2>
-      <table className="table mt-5 text-center">
-        <thead>
-          <tr>
-            <th>Claim ID </th>
-            <th>Customer ID</th>
-            <th>Claim Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading && <p>Loading Claims...</p>}
-          {hasError && <p>There was an error loading the Claims.</p>}
-
-          {claims.map((claim) => (
-            <tr key={claim.claim_id}>
-              
-              <td>{claim.claim_id}</td>
-              <td>{claim.customer_id}</td>
-              <td>{claim.status}</td>
-              <EditClaim claim={claim} />
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {isLoading && <p>Loading Claims...</p>}
+      {hasError && <p>There was an error loading the Claims.</p>}
+      {isAdmin ? <AdminDash list={claims} /> : <ClientDash list={claims} />}
     </>
   );
 };

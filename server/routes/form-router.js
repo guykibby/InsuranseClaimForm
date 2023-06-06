@@ -1,10 +1,14 @@
 const express = require("express");
 const formRouter = express.Router();
 const dataValidate = require("../middleware/dataValidation");
+const {
+  checkJwt,
+  checkScopes,
+} = require("../middleware/authorizationMiddleware");
 
 const formRepository = require("./form-router.repository");
 
-formRouter.get("/", async (req, res) => {
+formRouter.get("/", checkJwt, checkScopes, async (req, res) => {
   try {
     const allClaims = await formRepository.allClaims();
     res.json(allClaims);
