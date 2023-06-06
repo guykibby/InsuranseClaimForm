@@ -17,7 +17,6 @@ const ClientDash = ({ list }) => {
               <td>{claim.claim_id}</td>
               <td>{claim.customer_id}</td>
               <td>{claim.status}</td>
-              <EditClaim claim={claim} />
             </tr>
           ))}
         </tbody>

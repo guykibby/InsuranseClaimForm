@@ -27,7 +27,7 @@ const Dashboard = () => {
 
       const jsonData = await response.json();
 
-      if (isAdmin) {
+      if (jsonData.role === "Admin") {
         setIsAdmin(true);
         setIsLoading(false);
         setClaims(jsonData.claims);

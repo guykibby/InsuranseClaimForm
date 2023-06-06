@@ -3,6 +3,7 @@ import EditClaim from "./editClaim";
 const AdminDash = ({ list }) => {
   return (
     <>
+      <h2>Admin Dashboard</h2>
       <h2>Total Claims = {list.length}</h2>
       <table className="table mt-5 text-center">
         <thead>
