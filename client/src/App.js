@@ -1,36 +1,25 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "./index.css";
-import ensureLogo from "./images/ensure-logo.svg";
-import ensureSymbol from "./images/ensure-symbol.svg";
-
-//components
-
+import Header from "./components/header";
+import Footer from "./components/footer";
+import { Routes, Route } from "react-router-dom";
 import InputForm from "./components/InputForm";
+import Dashboard from "./components/dashboard"
+import Homepage from "./components/homepage";
 
 function App() {
   return (
-    <Fragment>
-      <div className="header">
-        <header>
-          <img src={ensureLogo} alt="enSURE Logo" className="App-logo"></img>
-          <hr className="primary-divider" align="left"></hr>
-        </header>
-      </div>
+    <>
+      <Header />
       <div className="primary-container">
-        <InputForm />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/claim" element={<InputForm />} />
+        </Routes>
       </div>
-      <div className="footer">
-        <footer>
-          <hr className="primary-divider" align="right"></hr>
-          <img
-            src={ensureSymbol}
-            alt="enSURE Symbol"
-            className="App-icon"
-          ></img>
-          <p className="footerText">Keeping the unexpected, uncomplicated</p>
-        </footer>
-      </div>
-    </Fragment>
+      <Footer />
+    </>
   );
 }
 
