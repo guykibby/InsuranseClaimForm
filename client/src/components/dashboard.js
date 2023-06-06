@@ -26,9 +26,16 @@ const Dashboard = () => {
       );
 
       const jsonData = await response.json();
-      setIsAdmin(true);
-      setIsLoading(false);
-      setClaims(jsonData.claims);
+
+      if (isAdmin) {
+        setIsAdmin(true);
+        setIsLoading(false);
+        setClaims(jsonData.claims);
+      } else {
+        setIsAdmin(false);
+        setIsLoading(false);
+        setClaims(jsonData.claims);
+      }
     } catch (err) {
       setIsLoading(false);
       setHasError(true);
