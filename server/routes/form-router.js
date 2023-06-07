@@ -6,7 +6,15 @@ const formRepository = require("./form-router.repository");
 
 const checkJwt = auth();
 
+const checkPermissions = (req, res, next) => {
+  if (!req.auth.payload.permissions.includes("admin:claims")) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+  next();
+};
+
 // Login into Auth0 with client@blablabla.com ClientPassword1
+// Login into Auth0 with admin@blablabla.com AdminPassword1
 
 // Get dashboard route
 formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
@@ -43,5 +51,25 @@ formRouter.post("/", dataValidate, async (req, res, next) => {
     next(err);
   }
 });
+
+formRouter.put(
+  "/:claim_id",
+  checkJwt,
+  checkPermissions,
+  async (req, res, next) => {
+    const { status } = req.body;
+    const { claim_id } = req.params;
+
+    try {
+      const updatedClaim = await formRepository.updateClaimStatus(
+        claim_id,
+        status
+      );
+      res.json(updatedClaim);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = formRouter;

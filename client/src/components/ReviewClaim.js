@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const EditClaim = ({ claim }) => {
   const [status, setStatus] = useState(claim.status);
+  const { getAccessTokenSilently } = useAuth0();
+  const statusOptions = ["submitted", "in progress", "approved", "denied"];
 
   const updateStatus = async (e) => {
     e.preventDefault();
     try {
+      const accessToken = await getAccessTokenSilently();
       const body = { status };
-      await fetch(`${process.env.REACT_APP_API_URL}/${claim.customer_id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      await fetch(
+        `${process.env.REACT_APP_API_SERVER_URL}/api/form/${claim.claim_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(body),
+        }
+      );
 
       window.location = "/dashboard";
     } catch (err) {
@@ -27,7 +37,7 @@ const EditClaim = ({ claim }) => {
         data-toggle="modal"
         data-target={`#id${claim.customer_id}`}
       >
-        Edit
+        Review
       </button>
 
       <div
@@ -38,7 +48,7 @@ const EditClaim = ({ claim }) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title">Edit Claim</h4>
+              <h4 className="modal-title">Review Claim</h4>
               <button
                 type="button"
                 className="close"
@@ -50,12 +60,23 @@ const EditClaim = ({ claim }) => {
             </div>
 
             <div className="modal-body">
-              <input
-                type="text"
+              <h2>Claim Details</h2>
+
+              {Object.keys(claim).map((key) => (
+                <p key={key}>{`${key}: ${claim[key]}`}</p>
+              ))}
+              <select
+                id="status"
                 className="form-control"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-              />
+              >
+                {statusOptions.map((statusOption) => (
+                  <option key={statusOption} value={statusOption}>
+                    {statusOption}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="modal-footer">

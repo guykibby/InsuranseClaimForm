@@ -38,7 +38,7 @@ module.exports = {
 
   allClaimsForAdmin: async () => {
     const allClaims = await pool.query(
-      "SELECT * FROM Claims WHERE status = 'submitted' OR status = 'in progress'"
+      "SELECT Claims.*, Users.Name, Users.Address, Users.EmailAddress, Users.PhoneNumber, Users.PreExistingMedicalConditions, Policies.PolicyNumber AS OtherPolicies FROM Claims JOIN Users ON Claims.customer_id = Users.CustomerID LEFT JOIN Policies ON Users.CustomerID = Policies.CustomerID AND Claims.policy_number != Policies.PolicyNumber;"
     );
     return allClaims.rows;
   },
@@ -51,5 +51,12 @@ module.exports = {
       [auth0ID]
     );
     return userClaims.rows;
+  },
+  updateClaimStatus: async (claim_id, status) => {
+    const updatedClaim = await pool.query(
+      "UPDATE Claims SET status = $1 WHERE claim_id = $2 RETURNING *",
+      [status, claim_id]
+    );
+    return updatedClaim.rows[0];
   },
 };
