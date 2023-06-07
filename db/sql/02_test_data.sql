@@ -23,7 +23,7 @@ VALUES
     true
   ),
   (
-    '23456789',
+    '34567790',
     'CUST1235',
     'Diabetes',
     '2023-05-01',
@@ -43,4 +43,154 @@ VALUES
     'GHI Medical Center',
     true,
     true
+  );
+
+INSERT INTO
+  Users (
+    Auth0ID,
+    CustomerID,
+    Name,
+    Address,
+    EmailAddress,
+    PhoneNumber,
+    NextOfKin,
+    PreExistingMedicalConditions,
+    BankAccountNumber
+  )
+VALUES
+  (
+    'auth0|647f077f42e6ffa2e795956a',
+    'CUST1234',
+    'John Doe',
+    '123 Main St, Anytown, Anywhere',
+    'johndoe@example.com',
+    '555-555-5555',
+    'Jane Doe',
+    '{"Diabetes"}',
+    '1234567890'
+  ),
+  (
+    'google-oauth2|206115320123186395447',
+    'CUST1235',
+    'Jane Doe',
+    '123 Main St, Anytown, Anywhere',
+    'janedoe@example.com',
+    '555-555-5556',
+    'John Doe',
+    '{"Hypertension"}',
+    '0987654321'
+  ),
+  (
+    'google-oauth2|306115320123186395448',
+    'CUST1236',
+    'Alice Smith',
+    '456 Elm St, Othertown, Otherwhere',
+    'alicesmith@example.com',
+    '555-555-5557',
+    'Bob Smith',
+    '{"Asthma"}',
+    '1029384756'
+  ),
+  (
+    'google-oauth2|117504592549069804988',
+    'CUST1237',
+    'Bob Smith',
+    '456 Elm St, Othertown, Otherwhere',
+    'bobsmith@example.com',
+    '555-555-5558',
+    'Alice Smith',
+    '{"Heart Disease"}',
+    '5647382910'
+  );
+
+INSERT INTO
+  Policies (PolicyNumber, CustomerID)
+VALUES
+  (
+    '12345678',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'John Doe'
+    )
+  ),
+  (
+    '23456789',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'John Doe'
+    )
+  ),
+  (
+    '34567790',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Jane Doe'
+    )
+  ),
+  (
+    '45678901',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Jane Doe'
+    )
+  ),
+  (
+    '56789012',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Alice Smith'
+    )
+  ),
+  (
+    '67890999',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Alice Smith'
+    )
+  ),
+  (
+    '56789888',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Bob Smith'
+    )
+  ),
+  (
+    '34567890',
+    (
+      SELECT
+        CustomerID
+      FROM
+        Users
+      WHERE
+        Name = 'Bob Smith'
+    )
   );
