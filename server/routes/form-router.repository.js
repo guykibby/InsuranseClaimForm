@@ -38,12 +38,7 @@ module.exports = {
 
   allClaimsForAdmin: async () => {
     const allClaims = await pool.query(
-      "SELECT Claims.*, Users.*, Policies.*
-      FROM Claims
-      JOIN Users ON Claims.customer_id = Users.customer_id
-      JOIN Policies ON Claims.customer_id = Policies.customer_id
-      WHERE Claims.status = 'submitted' OR Claims.status = 'in progress';
-      "
+      "SELECT * FROM Claims WHERE status = 'submitted' OR status = 'in progress'"
     );
     return allClaims.rows;
   },
