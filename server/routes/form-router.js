@@ -32,8 +32,18 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
   }
 });
 
+formRouter.get("/profile", checkJwt, async (req, res, next) => {
+  try {
+    const auth0ID = req.auth.payload.sub;
+    const user = await formRepository.getUserByAuth0ID(auth0ID);
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // post claim route
-formRouter.post("/", dataValidate, async (req, res, next) => {
+formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
     const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
 

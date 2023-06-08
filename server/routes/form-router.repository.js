@@ -59,4 +59,11 @@ module.exports = {
     );
     return updatedClaim.rows[0];
   },
+  getUserByAuth0ID: async (auth0ID) => {
+    const user = await pool.query(
+      "SELECT CustomerID, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions, BankAccountNumber FROM Users WHERE Auth0ID = $1",
+      [auth0ID]
+    );
+    return user.rows[0];
+  },
 };

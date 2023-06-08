@@ -4,7 +4,6 @@ import AdminDash from "./AdminDash";
 import ClientDash from "./ClientDash";
 
 const Dashboard = () => {
-  const { user } = useAuth0();
   const [claims, setClaims] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
