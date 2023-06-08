@@ -32,16 +32,6 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
   }
 });
 
-formRouter.get("/profile", checkJwt, async (req, res, next) => {
-  try {
-    const auth0ID = req.auth.payload.sub;
-    const user = await formRepository.getUserByAuth0ID(auth0ID);
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-});
-
 // post claim route
 formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
@@ -59,6 +49,18 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
     res.status(201).json(postClaimsForm);
   } catch (err) {
     next(err);
+  }
+});
+
+formRouter.put("/profile", checkJwt, async (req, res) => {
+  try {
+    const auth0ID = req.auth.payload.sub;
+    console.log(auth0ID);
+    const user = await formRepository.updateUser(auth0ID, req.body);
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -81,5 +83,15 @@ formRouter.put(
     }
   }
 );
+
+formRouter.get("/profile", checkJwt, async (req, res, next) => {
+  try {
+    const auth0ID = req.auth.payload.sub;
+    const user = await formRepository.getUserByAuth0ID(auth0ID);
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = formRouter;

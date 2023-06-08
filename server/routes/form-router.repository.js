@@ -66,4 +66,17 @@ module.exports = {
     );
     return user.rows[0];
   },
+  updateUser: async (auth0ID, userData) => {
+    console.log(userData);
+    const key = Object.keys(userData)[0];
+    console.log(key);
+    const value = userData[key];
+
+    const result = await pool.query(
+      `UPDATE Users SET ${key} = $1 WHERE Auth0ID = $2 RETURNING *`,
+      [value, auth0ID]
+    );
+
+    return result.rows[0];
+  },
 };
