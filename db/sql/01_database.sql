@@ -15,11 +15,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TYPE claim_status AS ENUM ('submitted', 'in progress', 'approved', 'denied');
 
 CREATE TABLE
   Claims (
     claim_id BIGINT DEFAULT unique_random_claim_id() PRIMARY KEY,
-    status ENUM('submitted', 'in progress', 'approved', 'denied') DEFAULT 'submitted',
+    status claim_status DEFAULT 'submitted',
     policy_number CHAR(8) CHECK (policy_number SIMILAR TO '[0-9]{8}'),
     customer_id VARCHAR NOT NULL,
     condition_claimed_for TEXT NOT NULL,
