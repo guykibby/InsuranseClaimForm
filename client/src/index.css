@@ -67,6 +67,14 @@ label {
   font-weight: bold;
 }
 
+.btn-claim {
+  background-color: #fc7940;
+}
+
+.btn-profile {
+  background-color: #fc7940;
+}
+
 p.disclaimer-paragraph {
   background-color: lightgray;
   font-style: italic;

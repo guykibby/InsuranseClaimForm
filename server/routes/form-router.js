@@ -6,7 +6,15 @@ const formRepository = require("./form-router.repository");
 
 const checkJwt = auth();
 
+const checkPermissions = (req, res, next) => {
+  if (!req.auth.payload.permissions.includes("admin:claims")) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+  next();
+};
+
 // Login into Auth0 with client@blablabla.com ClientPassword1
+// Login into Auth0 with admin@blablabla.com AdminPassword1
 
 // Get dashboard route
 formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
@@ -25,7 +33,7 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 });
 
 // post claim route
-formRouter.post("/", dataValidate, async (req, res, next) => {
+formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
     const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
 
@@ -39,6 +47,48 @@ formRouter.post("/", dataValidate, async (req, res, next) => {
     );
 
     res.status(201).json(postClaimsForm);
+  } catch (err) {
+    next(err);
+  }
+});
+
+formRouter.put("/profile", checkJwt, async (req, res) => {
+  try {
+    const auth0ID = req.auth.payload.sub;
+    console.log(auth0ID);
+    const user = await formRepository.updateUser(auth0ID, req.body);
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+formRouter.put(
+  "/:claim_id",
+  checkJwt,
+  checkPermissions,
+  async (req, res, next) => {
+    const { status } = req.body;
+    const { claim_id } = req.params;
+
+    try {
+      const updatedClaim = await formRepository.updateClaimStatus(
+        claim_id,
+        status
+      );
+      res.json(updatedClaim);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+formRouter.get("/profile", checkJwt, async (req, res, next) => {
+  try {
+    const auth0ID = req.auth.payload.sub;
+    const user = await formRepository.getUserByAuth0ID(auth0ID);
+    res.json(user);
   } catch (err) {
     next(err);
   }

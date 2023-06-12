@@ -1,4 +1,4 @@
-import EditClaim from "./editClaim";
+import ReviewClaim from "./ReviewClaim";
 
 const AdminDash = ({ list }) => {
   return (
@@ -11,6 +11,7 @@ const AdminDash = ({ list }) => {
             <th>Claim ID </th>
             <th>Customer ID</th>
             <th>Claim Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -19,7 +20,9 @@ const AdminDash = ({ list }) => {
               <td>{claim.claim_id}</td>
               <td>{claim.customer_id}</td>
               <td>{claim.status}</td>
-              <EditClaim claim={claim} />
+              <td>
+                <ReviewClaim claim={claim} />
+              </td>
             </tr>
           ))}
         </tbody>

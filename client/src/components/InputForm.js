@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 const InputForm = () => {
   const [policyNumber, setPolicyNumber] = useState("");
   const [customerId, setCustomerId] = useState("");
@@ -41,11 +42,14 @@ const InputForm = () => {
         consent: isChecked,
       };
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/form`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_SERVER_URL}/api/form`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
       if (!response.ok) {
         const error = await response.json();
         if (error.error === "Duplicate Entry") {
