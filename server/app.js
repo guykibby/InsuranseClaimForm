@@ -7,7 +7,11 @@ const errorMiddleware = require("./middleware/errorHandling");
 const BodyParser = require("body-parser");
 const { errors } = require("celebrate");
 app.use(BodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3333",
+  })
+);
 
 app.use("/api/form", formRouter);
 
