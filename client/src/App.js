@@ -1,6 +1,6 @@
 import React, { Profiler } from "react";
 import "./index.css";
-import Header from "./components/header";
+import Header from "./components/Header";
 import Footer from "./components/footer";
 import { Routes, Route } from "react-router-dom";
 import InputForm from "./components/InputForm";
