@@ -10,39 +10,39 @@ const Dashboard = () => {
   const [hasError, setHasError] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
 
-  const getClaims = async () => {
-    try {
-      setIsLoading(true);
-      const accessToken = await getAccessTokenSilently();
-      const response = await fetch(
-        `${process.env.REACT_APP_API_SERVER_URL}/api/form/dashboard`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const jsonData = await response.json();
-
-      if (jsonData.role === "Admin") {
-        setIsAdmin(true);
-        setIsLoading(false);
-        setClaims(jsonData.claims);
-      } else {
-        setIsAdmin(false);
-        setIsLoading(false);
-        setClaims(jsonData.claims);
-      }
-    } catch (err) {
-      setIsLoading(false);
-      setHasError(true);
-      console.error(err.message);
-    }
-  };
-
   useEffect(() => {
+    const getClaims = async () => {
+      try {
+        setIsLoading(true);
+        const accessToken = await getAccessTokenSilently();
+        const response = await fetch(
+          `${process.env.REACT_APP_API_SERVER_URL}/api/form/dashboard`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const jsonData = await response.json();
+
+        if (jsonData.role === "Admin") {
+          setIsAdmin(true);
+          setIsLoading(false);
+          setClaims(jsonData.claims);
+        } else {
+          setIsAdmin(false);
+          setIsLoading(false);
+          setClaims(jsonData.claims);
+        }
+      } catch (err) {
+        setIsLoading(false);
+        setHasError(true);
+        console.error(err.message);
+      }
+    };
+
     getClaims();
   }, [getAccessTokenSilently]);
 

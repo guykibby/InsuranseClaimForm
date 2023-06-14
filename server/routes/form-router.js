@@ -35,6 +35,19 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 // post claim route
 formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
+    // check if user exists in database
+    const auth0ID = req.auth.payload.sub;
+    const user = await formRepository.getUserByAuth0ID(auth0ID);
+    // check if user has same customer ID and Policy ID in request body
+    if (
+      user.customer_id !== req.body.customer_id ||
+      user.policy_number !== req.body.policy_number
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Invalid customer ID or policy number" });
+    }
+
     const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
 
     console.info(

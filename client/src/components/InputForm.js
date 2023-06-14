@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const InputForm = () => {
   const [policyNumber, setPolicyNumber] = useState("");
@@ -13,6 +14,8 @@ const InputForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  // add auth0 authentication
+  const { getAccessTokenSilently } = useAuth0();
 
   const resetForm = () => {
     setPolicyNumber("");
@@ -41,12 +44,16 @@ const InputForm = () => {
         other_insurance_provider: otherInsuranceProvider,
         consent: isChecked,
       };
+      const accessToken = await getAccessTokenSilently();
 
       const response = await fetch(
         `${process.env.REACT_APP_API_SERVER_URL}/api/form`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
           body: JSON.stringify(body),
         }
       );
