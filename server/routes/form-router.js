@@ -57,7 +57,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
       );
       res.status(201).json(postClaimsForm);
     } else {
-      res.status(404).send("ERROR");
+      res.status(400).send("ERROR Invalid request");
     }
   } catch (err) {
     next(err);
