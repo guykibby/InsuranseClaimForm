@@ -3,7 +3,7 @@ const formRouter = express.Router();
 const dataValidate = require("../middleware/dataValidation");
 const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
-
+const fetch = require("node-fetch");
 const checkJwt = auth();
 
 const checkPermissions = (req, res, next) => {
@@ -35,6 +35,16 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 // post claim route
 formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA}&response=${req.body.captcha}`
+    );
+
+  if(response.ok){
+
+console.log(response)
+
+  }
+
     const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
 
     console.info(
