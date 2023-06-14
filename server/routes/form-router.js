@@ -36,27 +36,29 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
     const response = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA}&response=${req.body.captcha}`
+      `https://www.google.com/recaptcha/api/siteverify?secret=6Lfi8JomAAAAAA38HqkSYewJT2bLAo98yRvda-9g&response=${req.body.captcha}`
     );
+    const data = await response.json();
+    console.log(data);
+    if (data.success === true) {
+      const postClaimsForm = await formRepository.postClaimsForm(
+        req,
+        res,
+        next
+      );
 
-  if(response.ok){
-
-console.log(response)
-
-  }
-
-    const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
-
-    console.info(
-      JSON.stringify({
-        timestamp: postClaimsForm.created_at,
-        route_name: "/api/form",
-        route_type: "POST",
-        claim_id: postClaimsForm.claim_id,
-      })
-    );
-
-    res.status(201).json(postClaimsForm);
+      console.info(
+        JSON.stringify({
+          timestamp: postClaimsForm.created_at,
+          route_name: "/api/form",
+          route_type: "POST",
+          claim_id: postClaimsForm.claim_id,
+        })
+      );
+      res.status(201).json(postClaimsForm);
+    } else {
+      res.status(404).send("ERROR");
+    }
   } catch (err) {
     next(err);
   }
