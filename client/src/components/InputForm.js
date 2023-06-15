@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAuth0 } from "@auth0/auth0-react";
+// use navigate back to dashboard after succesful submission
+import { useNavigate } from "react-router-dom";
+
 const InputForm = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [policyNumber, setPolicyNumber] = useState("");
@@ -16,6 +19,7 @@ const InputForm = () => {
   const [error, setError] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [captchaValue, setCaptchaValue] = useState("");
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setPolicyNumber("");
@@ -82,7 +86,8 @@ const InputForm = () => {
         }
       } else {
         alert("Submission Successfully Added!");
-        return resetForm();
+        navigate("/dashboard");
+        return;
       }
     } catch (err) {
       setError(true);

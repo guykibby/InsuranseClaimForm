@@ -39,7 +39,6 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
       `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.API_KEY}&response=${req.body.captcha}`
     );
     const data = await response.json();
-    console.log(data);
     if (data.success === true) {
       const postClaimsForm = await formRepository.postClaimsForm(
         req,
