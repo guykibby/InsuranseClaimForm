@@ -63,6 +63,10 @@ const InputForm = () => {
           alert("Duplicate Entry, You have already filed this claim.");
           return resetForm();
         }
+        if (error.error === "Invalid customer ID or policy number") {
+          alert("Invalid customer ID or policy number");
+          return resetForm();
+        }
         if (error.message === "Validation failed") {
           alert("Validation Failed, Please check your details and try again");
           return resetForm();

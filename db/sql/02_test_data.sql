@@ -45,8 +45,7 @@ VALUES
     true
   );
 
-INSERT INTO
-  Users (
+INSERT INTO Users (
     Auth0ID,
     CustomerID,
     Name,
@@ -55,7 +54,8 @@ INSERT INTO
     PhoneNumber,
     NextOfKin,
     PreExistingMedicalConditions,
-    BankAccountNumber
+    BankAccountNumber,
+    UserPolicies
   )
 VALUES
   (
@@ -67,7 +67,8 @@ VALUES
     '555-555-5555',
     'Jane Doe',
     '{"Diabetes"}',
-    '1234567890'
+    '1234567890',
+    ARRAY['12345678', '23456789']
   ),
   (
     'google-oauth2|206115320123186395447',
@@ -78,7 +79,8 @@ VALUES
     '555-555-5556',
     'John Doe',
     '{"Hypertension"}',
-    '0987654321'
+    '0987654321',
+    ARRAY['34567790', '45678901']
   ),
   (
     'google-oauth2|306115320123186395448',
@@ -89,7 +91,8 @@ VALUES
     '555-555-5557',
     'Bob Smith',
     '{"Asthma"}',
-    '1029384756'
+    '1029384756',
+    ARRAY['56789012', '67890999']
   ),
   (
     'google-oauth2|117504592549069804988',
@@ -100,97 +103,6 @@ VALUES
     '555-555-5558',
     'Alice Smith',
     '{"Heart Disease"}',
-    '5647382910'
-  );
-
-INSERT INTO
-  Policies (PolicyNumber, CustomerID)
-VALUES
-  (
-    '12345678',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'John Doe'
-    )
-  ),
-  (
-    '23456789',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'John Doe'
-    )
-  ),
-  (
-    '34567790',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Jane Doe'
-    )
-  ),
-  (
-    '45678901',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Jane Doe'
-    )
-  ),
-  (
-    '56789012',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Alice Smith'
-    )
-  ),
-  (
-    '67890999',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Alice Smith'
-    )
-  ),
-  (
-    '56789888',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Bob Smith'
-    )
-  ),
-  (
-    '34567890',
-    (
-      SELECT
-        CustomerID
-      FROM
-        Users
-      WHERE
-        Name = 'Bob Smith'
-    )
+    '5647382910',
+    ARRAY['56789888', '34567890']
   );

@@ -38,7 +38,7 @@ module.exports = {
 
   allClaimsForAdmin: async () => {
     const allClaims = await pool.query(
-      "SELECT Claims.*, Users.Name, Users.Address, Users.EmailAddress, Users.PhoneNumber, Users.PreExistingMedicalConditions, Policies.PolicyNumber AS OtherPolicies FROM Claims JOIN Users ON Claims.customer_id = Users.CustomerID LEFT JOIN Policies ON Users.CustomerID = Policies.CustomerID AND Claims.policy_number != Policies.PolicyNumber;"
+      "SELECT Claims.*, Users.Name, Users.Address, Users.EmailAddress, Users.PhoneNumber, Users.PreExistingMedicalConditions, Users.UserPolicies FROM Claims JOIN Users ON Claims.customer_id = Users.CustomerID;"
     );
     return allClaims.rows;
   },
@@ -61,7 +61,7 @@ module.exports = {
   },
   getUserByAuth0ID: async (auth0ID) => {
     const user = await pool.query(
-      "SELECT CustomerID, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions, BankAccountNumber FROM Users WHERE Auth0ID = $1",
+      "SELECT CustomerID, BankAccountNumber, UserPolicies, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
       [auth0ID]
     );
     return user.rows[0];

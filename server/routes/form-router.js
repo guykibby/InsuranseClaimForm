@@ -38,10 +38,11 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
     // check if user exists in database
     const auth0ID = req.auth.payload.sub;
     const user = await formRepository.getUserByAuth0ID(auth0ID);
+
     // check if user has same customer ID and Policy ID in request body
     if (
-      user.customer_id !== req.body.customer_id ||
-      user.policy_number !== req.body.policy_number
+      user.customer_id !== req.body.customerid ||
+      user.userpolicies.includes(req.body.policy_number) === false
     ) {
       return res
         .status(400)
