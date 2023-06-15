@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -58,7 +58,6 @@ const InputForm = () => {
         consent: isChecked,
         captcha: captchaValue,
       };
-      const accessToken = await getAccessTokenSilently();
 
       const response = await fetch(
         `${process.env.REACT_APP_API_SERVER_URL}/api/form`,
@@ -75,10 +74,6 @@ const InputForm = () => {
         const error = await response.json();
         if (error.error === "Duplicate Entry") {
           alert("Duplicate Entry, You have already filed this claim.");
-          return resetForm();
-        }
-        if (error.error === "Invalid customer ID or policy number") {
-          alert("Invalid customer ID or policy number");
           return resetForm();
         }
         if (error.message === "Validation failed") {
