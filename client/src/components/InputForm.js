@@ -1,14 +1,9 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-<<<<<<< HEAD
-import { useAuth0 } from "@auth0/auth0-react";
-=======
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAuth0 } from "@auth0/auth0-react";
-// use navigate back to dashboard after succesful submission
 import { useNavigate } from "react-router-dom";
->>>>>>> main
 
 const InputForm = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -22,13 +17,8 @@ const InputForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-<<<<<<< HEAD
-  // add auth0 authentication
-  const { getAccessTokenSilently } = useAuth0();
-=======
   const [captchaValue, setCaptchaValue] = useState("");
   const navigate = useNavigate();
->>>>>>> main
 
   const resetForm = () => {
     setPolicyNumber("");

@@ -1,5 +1,5 @@
 import "./index.css";
-import Header from "./components/Header";
+import Header from "./components/header";
 import Footer from "./components/footer";
 import { Routes, Route } from "react-router-dom";
 import InputForm from "./components/InputForm";
