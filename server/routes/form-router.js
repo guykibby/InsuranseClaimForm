@@ -3,7 +3,7 @@ const formRouter = express.Router();
 const dataValidate = require("../middleware/dataValidation");
 const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
-
+const fetch = require("node-fetch");
 const checkJwt = auth();
 
 const checkPermissions = (req, res, next) => {
@@ -35,18 +35,29 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 // post claim route
 formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   try {
-    const postClaimsForm = await formRepository.postClaimsForm(req, res, next);
-
-    console.info(
-      JSON.stringify({
-        timestamp: postClaimsForm.created_at,
-        route_name: "/api/form",
-        route_type: "POST",
-        claim_id: postClaimsForm.claim_id,
-      })
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.API_KEY}&response=${req.body.captcha}`
     );
+    const data = await response.json();
+    if (data.success === true) {
+      const postClaimsForm = await formRepository.postClaimsForm(
+        req,
+        res,
+        next
+      );
 
-    res.status(201).json(postClaimsForm);
+      console.info(
+        JSON.stringify({
+          timestamp: postClaimsForm.created_at,
+          route_name: "/api/form",
+          route_type: "POST",
+          claim_id: postClaimsForm.claim_id,
+        })
+      );
+      res.status(201).json(postClaimsForm);
+    } else {
+      res.status(400).send("ERROR Invalid request");
+    }
   } catch (err) {
     next(err);
   }
