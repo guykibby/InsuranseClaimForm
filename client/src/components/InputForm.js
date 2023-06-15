@@ -31,10 +31,15 @@ const InputForm = () => {
   };
 
   const onChange = (value) => {
+    console.log(value);
     setCaptchaValue(value);
   };
 
   const onSubmit = async (event) => {
+    if (!captchaValue) {
+      alert("Please complete Captcha Verification and try again.");
+      return resetForm();
+    }
     const accessToken = await getAccessTokenSilently();
     event.preventDefault();
     try {
@@ -48,6 +53,7 @@ const InputForm = () => {
         service_provider_name: serviceProviderName,
         other_insurance_provider: otherInsuranceProvider,
         consent: isChecked,
+        captcha: captchaValue,
       };
 
       const response = await fetch(
@@ -190,7 +196,7 @@ const InputForm = () => {
           />
           <label htmlFor="consent">I consent</label>
           <ReCAPTCHA
-            sitekey="6Lf3t4wmAAAAAO1DB153GsdNmtm66nX0F_1i6YGF"
+            sitekey={process.env.REACT_APP_CAPTCHA}
             onChange={onChange}
           />
           ,
