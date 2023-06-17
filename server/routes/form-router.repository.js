@@ -32,58 +32,81 @@ module.exports = {
 
       return newItem.rows[0];
     } catch (err) {
-      throw err;
+      throw new Error("Failed to post claims form");
     }
   },
 
   allClaimsForAdmin: async () => {
-    const allClaims = await pool.query(
-      "SELECT Claims.*, Users.Name, Users.Address, Users.EmailAddress, Users.PhoneNumber, Users.PreExistingMedicalConditions, Users.UserPolicies FROM Claims JOIN Users ON Claims.customer_id = Users.CustomerID;"
-    );
-    return allClaims.rows;
+    try {
+      const allClaims = await pool.query(
+        "SELECT Claims.*, Users.Name, Users.Address, Users.EmailAddress, Users.PhoneNumber, Users.PreExistingMedicalConditions, Users.UserPolicies FROM Claims JOIN Users ON Claims.customer_id = Users.CustomerID;"
+      );
+      return allClaims.rows;
+    } catch (err) {
+      throw new Error("Failed to fetch all claims for admin");
+    }
   },
 
   allClaimsForUser: async (auth0ID) => {
-    const userClaims = await pool.query(
-      `SELECT Claims.* FROM Claims 
+    try {
+      const userClaims = await pool.query(
+        `SELECT Claims.* FROM Claims 
       JOIN Users ON Claims.customer_id = Users.CustomerID
       WHERE (Users.Auth0ID = $1)`,
-      [auth0ID]
-    );
-    return userClaims.rows;
-  },
-  updateClaimStatus: async (claim_id, status) => {
-    const updatedClaim = await pool.query(
-      "UPDATE Claims SET status = $1 WHERE claim_id = $2 RETURNING *",
-      [status, claim_id]
-    );
-    return updatedClaim.rows[0];
-  },
-  getUserByAuth0ID: async (auth0ID) => {
-    const user = await pool.query(
-      "SELECT CustomerID, UserPolicies, BankAccountNumber, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
-      [auth0ID]
-    );
-    return user.rows[0];
-  },
-  updateUser: async (auth0ID, userData) => {
-    const key = Object.keys(userData)[0];
-    const value = userData[key];
-
-    if (
-      key === "CustomerID" ||
-      key === "UserPolicies" ||
-      key === "BankAccountNumber"
-    ) {
-      // If the key is one of the excluded values, return the existing user without updating the database
-      return getUser(auth0ID); // Implement the `getUser` function to fetch and return the user data
+        [auth0ID]
+      );
+      return userClaims.rows;
+    } catch (err) {
+      throw new Error("Failed to fetch all claims for user");
     }
+  },
 
-    const result = await pool.query(
-      `UPDATE Users SET ${key} = $1 WHERE Auth0ID = $2 RETURNING *`,
-      [value, auth0ID]
-    );
+  updateClaimStatus: async (claim_id, status) => {
+    try {
+      const updatedClaim = await pool.query(
+        "UPDATE Claims SET status = $1 WHERE claim_id = $2 RETURNING *",
+        [status, claim_id]
+      );
+      return updatedClaim.rows[0];
+    } catch (err) {
+      throw new Error("Failed to update claim status");
+    }
+  },
 
-    return result.rows[0];
+  getUserByAuth0ID: async (auth0ID) => {
+    try {
+      const user = await pool.query(
+        "SELECT CustomerID, UserPolicies, BankAccountNumber, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
+        [auth0ID]
+      );
+      return user.rows[0];
+    } catch (err) {
+      throw new Error("Failed to fetch user by Auth0 ID");
+    }
+  },
+
+  updateUser: async (auth0ID, userData) => {
+    try {
+      const key = Object.keys(userData)[0];
+      const value = userData[key];
+
+      if (
+        key === "CustomerID" ||
+        key === "UserPolicies" ||
+        key === "BankAccountNumber"
+      ) {
+        // If the key is one of the excluded values, return the existing user without updating the database
+        return getUser(auth0ID); // Implement the `getUser` function to fetch and return the user data
+      }
+
+      const result = await pool.query(
+        `UPDATE Users SET ${key} = $1 WHERE Auth0ID = $2 RETURNING *`,
+        [value, auth0ID]
+      );
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error("Failed to update user by Auth0 ID");
+    }
   },
 };
