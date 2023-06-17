@@ -61,7 +61,7 @@ module.exports = {
   },
   getUserByAuth0ID: async (auth0ID) => {
     const user = await pool.query(
-      "SELECT CustomerID, BankAccountNumber, UserPolicies, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
+      "SELECT CustomerID, UserPolicies, BankAccountNumber, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
       [auth0ID]
     );
     return user.rows[0];

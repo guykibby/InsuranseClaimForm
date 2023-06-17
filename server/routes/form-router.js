@@ -5,13 +5,7 @@ const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
 const fetch = require("node-fetch");
 const checkJwt = auth();
-
-const checkPermissions = (req, res, next) => {
-  if (!req.auth.payload.permissions.includes("admin:claims")) {
-    return res.status(403).json({ error: "Access denied" });
-  }
-  next();
-};
+const checkPermissions = require("../middleware/checkPermissions");
 
 // Login into Auth0 with client@blablabla.com ClientPassword1
 // Login into Auth0 with admin@blablabla.com AdminPassword1
@@ -49,9 +43,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
         user.customer_id !== req.body.customerid ||
         user.userpolicies.includes(req.body.policy_number) === false
       ) {
-        return res
-          .status(400)
-          .json({ error: "Invalid customer ID or policy number" });
+        return res.status(400).json({ error: "Validation failed" });
       }
       const postClaimsForm = await formRepository.postClaimsForm(
         req,

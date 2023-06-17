@@ -69,24 +69,34 @@ const InputForm = () => {
   return (
     <>
       <div className="claims-form">
-        {Object.keys(profileData).map((key) => (
+        {Object.keys(profileData).map((key, index) => (
           <div key={key}>
             {key}:&nbsp;
-            {editItemId === key ? (
-              <form onSubmit={handleEditSubmit}>
-                <input
-                  type="text"
-                  value={editItemValue}
-                  onChange={handleEditInputChange}
-                />
-                <button type="submit">Save</button>
-              </form>
+            {index < 3 ? (
+              // Display the value without Edit button for the first three indexes
+              profileData[key]
             ) : (
               <>
-                {profileData[key]}
-                <button onClick={() => handleEditClick(key, profileData[key])}>
-                  Edit
-                </button>
+                {editItemId === key ? (
+                  <form onSubmit={handleEditSubmit}>
+                    <input
+                      type="text"
+                      value={editItemValue}
+                      onChange={handleEditInputChange}
+                    />
+                    <button type="submit">Save</button>
+                  </form>
+                ) : (
+                  <>
+                    {profileData[key]}
+                    {console.log(key)}
+                    <button
+                      onClick={() => handleEditClick(key, profileData[key])}
+                    >
+                      Edit
+                    </button>
+                  </>
+                )}
               </>
             )}
           </div>
