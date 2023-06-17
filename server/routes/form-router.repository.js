@@ -76,12 +76,12 @@ module.exports = {
   getUserByAuth0ID: async (auth0ID) => {
     try {
       const user = await pool.query(
-        "SELECT CustomerID, UserPolicies, BankAccountNumber, Name, Address, EmailAddress, PhoneNumber, NextOfKin, PreExistingMedicalConditions FROM Users WHERE Auth0ID = $1",
+        "SELECT Name, CustomerID, UserPolicies, BankAccountNumber, PreExistingMedicalConditions, Address, EmailAddress, PhoneNumber, NextOfKin FROM Users WHERE Auth0ID = $1",
         [auth0ID]
       );
       return user.rows[0];
     } catch (err) {
-      throw new Error("Failed to fetch user by Auth0 ID");
+      throw new Error("Failed to fetch user");
     }
   },
 
@@ -89,11 +89,13 @@ module.exports = {
     try {
       const key = Object.keys(userData)[0];
       const value = userData[key];
-
+      console.log(key);
+      console.log(value);
       if (
         key === "CustomerID" ||
         key === "UserPolicies" ||
-        key === "BankAccountNumber"
+        key === "BankAccountNumber" ||
+        key === "preexistingmedicalconditions"
       ) {
         // If the key is one of the excluded values, return the existing user without updating the database
         return getUser(auth0ID); // Implement the `getUser` function to fetch and return the user data
@@ -106,7 +108,7 @@ module.exports = {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error("Failed to update user by Auth0 ID");
+      throw new Error("Failed to update user");
     }
   },
 };

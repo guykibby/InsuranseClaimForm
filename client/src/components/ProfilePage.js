@@ -72,7 +72,7 @@ const InputForm = () => {
         {Object.keys(profileData).map((key, index) => (
           <div key={key}>
             {key}:&nbsp;
-            {index < 3 ? (
+            {index < 5 ? (
               // Display the value without Edit button for the first three indexes
               profileData[key]
             ) : (

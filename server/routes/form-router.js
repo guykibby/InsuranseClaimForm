@@ -68,7 +68,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   }
 });
 
-formRouter.put("/profile", checkJwt, async (req, res) => {
+formRouter.put("/profile", checkJwt, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     console.log(auth0ID);
@@ -76,7 +76,7 @@ formRouter.put("/profile", checkJwt, async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    next(err);
   }
 });
 
