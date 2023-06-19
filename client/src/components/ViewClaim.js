@@ -5,12 +5,12 @@ const ViewClaim = ({ claim }) => {
         type="button"
         className="btn btn-warning"
         data-toggle="modal"
-        data-target={`#id${claim.customer_id}`}
+        data-target={`#id${claim.claim_id}`}
       >
         View Claim
       </button>
 
-      <div className="modal" id={`id${claim.customer_id}`}>
+      <div className="modal" id={`id${claim.claim_id}`}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">

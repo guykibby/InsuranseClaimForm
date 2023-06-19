@@ -13,6 +13,7 @@ const validateInput = celebrate({
     service_provider_name: Joi.string().required(),
     other_insurance_provider: Joi.boolean().default(false),
     consent: Joi.boolean().default(false),
+    captcha: Joi.string().required(),
   }),
 });
 
