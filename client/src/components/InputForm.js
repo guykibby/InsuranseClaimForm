@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAuth0 } from "@auth0/auth0-react";
-// use navigate back to dashboard after succesful submission
 import { useNavigate } from "react-router-dom";
 
 const InputForm = () => {

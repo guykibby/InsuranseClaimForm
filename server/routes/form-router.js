@@ -5,13 +5,7 @@ const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
 const fetch = require("node-fetch");
 const checkJwt = auth();
-
-const checkPermissions = (req, res, next) => {
-  if (!req.auth.payload.permissions.includes("admin:claims")) {
-    return res.status(403).json({ error: "Access denied" });
-  }
-  next();
-};
+const checkPermissions = require("../middleware/checkPermissions");
 
 // Login into Auth0 with client@blablabla.com ClientPassword1
 // Login into Auth0 with admin@blablabla.com AdminPassword1
@@ -40,6 +34,17 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
     );
     const data = await response.json();
     if (data.success === true) {
+      // check if user exists in database
+      const auth0ID = req.auth.payload.sub;
+      const user = await formRepository.getUserByAuth0ID(auth0ID);
+
+      // check if user has same customer ID and Policy ID in request body
+      if (
+        user.customer_id !== req.body.customerid ||
+        user.userpolicies.includes(req.body.policy_number) === false
+      ) {
+        return res.status(400).json({ error: "Validation failed" });
+      }
       const postClaimsForm = await formRepository.postClaimsForm(
         req,
         res,
@@ -63,7 +68,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   }
 });
 
-formRouter.put("/profile", checkJwt, async (req, res) => {
+formRouter.put("/profile", checkJwt, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     console.log(auth0ID);
@@ -71,7 +76,7 @@ formRouter.put("/profile", checkJwt, async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Internal server error" });
+    next(err);
   }
 });
 

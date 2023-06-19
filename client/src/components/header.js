@@ -1,16 +1,39 @@
 import ensureLogo from "../images/ensure-logo.svg";
-import { NavBarButtons } from "./nav-bar-buttons";
+import { useAuth0 } from "@auth0/auth0-react";
+import { LoginButton } from "./client-login-button";
+import { LogoutButton } from "./logout-button";
+import { Link, useLocation } from "react-router-dom";
 
-const header = () => {
+const Header = () => {
+  const { isAuthenticated } = useAuth0();
+  const location = useLocation();
+
   return (
     <div className="header">
       <header>
         <img src={ensureLogo} alt="enSURE Logo" className="App-logo"></img>
-        <NavBarButtons />
+        <div className="nav-bar__buttons">
+          {!isAuthenticated && (
+            <>
+              <LoginButton />
+            </>
+          )}
+          {isAuthenticated && (
+            <>
+              {location.pathname === "/dashboard" && (
+                <Link to="/">Homepage</Link>
+              )}
+              {location.pathname !== "/dashboard" && (
+                <Link to="/dashboard">Dashboard</Link>
+              )}
+              <LogoutButton />
+            </>
+          )}
+        </div>
         <hr className="primary-divider" align="left"></hr>
       </header>
     </div>
   );
 };
 
-export default header;
+export default Header;
