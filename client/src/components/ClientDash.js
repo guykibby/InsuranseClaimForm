@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ClientDash = ({ list }) => {
   return (
     <div>
-      <h2 className="client-dashboard">Client Dashboard</h2>
+      <h2 className="client-dashboard">Claimant Dashboard</h2>
       {/* <h3>Customer ID:{list[0].customer_id}</h3> */}
       <table className="table mt-5 text-center">
         <thead>
