@@ -83,6 +83,7 @@ formRouter.put("/profile", checkJwt, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     req.body = encodeData(req.body);
+    console.log(req.body);
 
     const user = await formRepository.updateUser(auth0ID, req.body);
     res.json(user);
