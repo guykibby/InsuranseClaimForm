@@ -1,9 +1,10 @@
-const CryptoJS = require("crypto-js");
-
 const encodeData = (data) => {
-  const wordArray = CryptoJS.enc.Utf8.parse(data);
-  const base64 = CryptoJS.enc.Base64.stringify(wordArray);
-  return base64;
+  for (const key in data) {
+    if (key === "string") {
+      key = Buffer.from(key).toString("base64");
+    }
+  }
+  return data;
 };
 
 const decodeData = (encodedData) => {
