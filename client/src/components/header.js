@@ -21,10 +21,18 @@ const Header = () => {
           {isAuthenticated && (
             <>
               {location.pathname === "/dashboard" && (
-                <Link to="/">Homepage</Link>
+                <Link to="/">
+                  <button className="btn-nav-homepage" type="button">
+                    Homepage
+                  </button>
+                </Link>
               )}
               {location.pathname !== "/dashboard" && (
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard">
+                  <button className="btn-nav-dashboard" type="button">
+                    Dashboard
+                  </button>
+                </Link>
               )}
               <LogoutButton />
             </>
