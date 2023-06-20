@@ -6,6 +6,7 @@ const formRepository = require("./form-router.repository");
 const fetch = require("node-fetch");
 const checkJwt = auth();
 const checkPermissions = require("../middleware/checkPermissions");
+const { encodeData, decodeData } = require("../middleware/encodingFunctions");
 
 // Login into Auth0 with client@blablabla.com ClientPassword1
 // Login into Auth0 with admin@blablabla.com AdminPassword1
@@ -45,6 +46,9 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
       ) {
         return res.status(400).json({ error: "Validation failed" });
       }
+      req.body.map((item) => {
+        console.log(encodeData(item));
+      });
       const postClaimsForm = await formRepository.postClaimsForm(
         req,
         res,
