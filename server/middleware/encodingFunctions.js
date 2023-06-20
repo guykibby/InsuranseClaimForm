@@ -1,16 +1,39 @@
-const encodeData = (data) => {
-  for (const key in data) {
-    if (key === "string") {
-      key = Buffer.from(key).toString("base64");
+const keysToEncode = [
+  "condition_claimed_for",
+  "symptoms_details",
+  "medical_service_type",
+  "service_provider_name",
+  "name",
+  "address",
+  "emailaddress",
+  "phonenumber",
+  "nextofkin",
+  "preexistingmedicalconditions",
+  "bankaccountnumber",
+];
+
+const encodeData = (obj) => {
+  const encodedObject = {};
+  for (let key in obj) {
+    if (typeof obj[key] === "string" && keysToEncode.includes(key)) {
+      encodedObject[key] = Buffer.from(obj[key]).toString("base64");
+    } else {
+      encodedObject[key] = obj[key];
     }
   }
-  return data;
+  return encodedObject;
 };
 
-const decodeData = (encodedData) => {
-  const parsedWordArray = CryptoJS.enc.Base64.parse(encodedData);
-  const parsedStr = parsedWordArray.toString(CryptoJS.enc.Utf8);
-  return parsedStr;
+const decodeData = (obj) => {
+  const decodedObject = {};
+  for (let key in obj) {
+    if (typeof obj[key] === "string" && keysToEncode.includes(key)) {
+      decodedObject[key] = Buffer.from(obj[key], "base64").toString("utf-8");
+    } else {
+      decodedObject[key] = obj[key];
+    }
+  }
+  return decodedObject;
 };
 
 module.exports = {

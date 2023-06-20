@@ -14,34 +14,12 @@ VALUES
   (
     '12345678',
     'CUST1234',
-    'Back pain',
+    'QmFjayBwYWlu',
     '2022-01-01',
-    'Experienced sharp pain while lifting heavy object',
-    'Physical therapy',
-    'ABC Medical Center',
+    'RXhwZXJpZW5jZWQgc2hhcnAgcGFpbiB3aGlsZSBsaWZ0aW5nIGhlYXZ5IG9iamVjdA',
+    'UGh5c2ljYWwgdGhlcmFweQ',
+    'QUJDIE1lZGljYWwgQ2VudGVy',
     false,
-    true
-  ),
-  (
-    '34567790',
-    'CUST1235',
-    'Diabetes',
-    '2023-05-01',
-    'Frequent urination and increased thirst',
-    'Endocrinology',
-    'DEF Medical Center',
-    false,
-    true
-  ),
-  (
-    '34567890',
-    'CUST1237',
-    'Asthma',
-    '2023-05-01',
-    'Difficulty breathing and wheezing',
-    'Pulmonology',
-    'GHI Medical Center',
-    true,
     true
   );
 

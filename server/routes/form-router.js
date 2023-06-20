@@ -16,11 +16,18 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
   try {
     if (req.auth.payload.permissions.includes("admin:claims")) {
       const adminClaims = await formRepository.allClaimsForAdmin();
-      res.json({ claims: adminClaims, role: "Admin" });
+      const decodedClaims = adminClaims.map((claim) => {
+        return decodeData(claim);
+      });
+
+      res.json({ claims: decodedClaims, role: "Admin" });
     } else {
       const auth0ID = req.auth.payload.sub;
       const userClaims = await formRepository.allClaimsForUser(auth0ID);
-      res.json({ claims: userClaims, role: null });
+      const decodedClaims = userClaims.map((claim) => {
+        return decodeData(claim);
+      });
+      res.json({ claims: decodedClaims, role: null });
     }
   } catch (err) {
     next(err);
@@ -46,9 +53,9 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
       ) {
         return res.status(400).json({ error: "Validation failed" });
       }
-      req.body.map((item) => {
-        console.log(encodeData(item));
-      });
+
+      req.body = encodeData(req.body);
+
       const postClaimsForm = await formRepository.postClaimsForm(
         req,
         res,
@@ -75,7 +82,8 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
 formRouter.put("/profile", checkJwt, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
-    console.log(auth0ID);
+    req.body = encodeData(req.body);
+
     const user = await formRepository.updateUser(auth0ID, req.body);
     res.json(user);
   } catch (err) {
@@ -108,7 +116,8 @@ formRouter.get("/profile", checkJwt, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     const user = await formRepository.getUserByAuth0ID(auth0ID);
-    res.json(user);
+    const userObject = decodeData(user);
+    res.json(userObject);
   } catch (err) {
     next(err);
   }
