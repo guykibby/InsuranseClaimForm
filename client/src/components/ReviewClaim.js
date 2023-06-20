@@ -90,7 +90,7 @@ const EditClaim = ({ claim }) => {
               </button>
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn-modal-close"
                 data-dismiss="modal"
                 onClick={() => setStatus(claim.status)}
               >
