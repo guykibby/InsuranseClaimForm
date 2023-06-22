@@ -8,7 +8,9 @@ const footer = () => {
         <hr className="primary-divider" align="right"></hr>
         <img src={ensureSymbol} alt="enSURE Symbol" className="App-icon"></img>
         <p className="footerText">Keeping the unexpected, uncomplicated</p>
-        <a href={privacyStatement}>Privacy Statement</a>
+        <a href={privacyStatement} className="privacy-statement">
+          Privacy Statement
+        </a>
       </footer>
     </div>
   );

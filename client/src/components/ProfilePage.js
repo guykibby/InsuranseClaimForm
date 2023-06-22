@@ -68,9 +68,10 @@ const InputForm = () => {
 
   return (
     <>
-      <div className="claims-form">
+      <div className="profile-page">
+        <h1>Claimant Profile</h1>
         {Object.keys(profileData).map((key, index) => (
-          <div key={key}>
+          <div key={key} className="profile-item">
             {key}:&nbsp;
             {index < 5 ? (
               // Display the value without Edit button for the first three indexes
@@ -83,8 +84,11 @@ const InputForm = () => {
                       type="text"
                       value={editItemValue}
                       onChange={handleEditInputChange}
+                      className="profileEditInput"
                     />
-                    <button type="submit">Save</button>
+                    <button type="submit" className="btn-profile-save">
+                      Save
+                    </button>
                   </form>
                 ) : (
                   <>
@@ -92,6 +96,7 @@ const InputForm = () => {
                     {console.log(key)}
                     <button
                       onClick={() => handleEditClick(key, profileData[key])}
+                      className="btn-profile-edit"
                     >
                       Edit
                     </button>
