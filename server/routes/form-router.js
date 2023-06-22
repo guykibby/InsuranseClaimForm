@@ -1,6 +1,9 @@
 const express = require("express");
 const formRouter = express.Router();
-const dataValidate = require("../middleware/dataValidation");
+const {
+  validateInput,
+  validateEdits,
+} = require("../middleware/dataValidation");
 const { auth } = require("express-oauth2-jwt-bearer");
 const formRepository = require("./form-router.repository");
 const fetch = require("node-fetch");
@@ -54,7 +57,7 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
 });
 
 // post claim route
-formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
+formRouter.post("/", checkJwt, validateInput, async (req, res, next) => {
   try {
     const response = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.API_KEY}&response=${req.body.captcha}`
@@ -99,7 +102,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
   }
 });
 
-formRouter.put("/profile", checkJwt, async (req, res, next) => {
+formRouter.put("/profile", checkJwt, validateEdits, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     req.body = encodeData(req.body);
@@ -125,10 +128,13 @@ formRouter.put(
   "/:claim_id",
   checkJwt,
   checkPermissions,
+  validateEdits,
   async (req, res, next) => {
     const { status } = req.body;
     const { claim_id } = req.params;
     const auth0ID = req.auth.payload.sub;
+    console.log(claim_id);
+    console.log(status);
 
     try {
       const updatedClaim = await formRepository.updateClaimStatus(
