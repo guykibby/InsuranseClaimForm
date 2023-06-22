@@ -8,9 +8,6 @@ const checkJwt = auth();
 const checkPermissions = require("../middleware/checkPermissions");
 const { encodeData, decodeData } = require("../middleware/encodingFunctions");
 
-// Login into Auth0 with client@blablabla.com ClientPassword1
-// Login into Auth0 with admin@blablabla.com AdminPassword1
-
 // Get dashboard route
 formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
   try {
@@ -37,7 +34,9 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
       const decodedClaims = userClaims.map((claim) => {
         return decodeData(claim);
       });
+
       res.json({ claims: decodedClaims, role: null });
+
       // Logging
       console.info(
         JSON.stringify({
