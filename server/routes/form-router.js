@@ -21,6 +21,16 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
       });
 
       res.json({ claims: decodedClaims, role: "Admin" });
+      // Logging
+      console.info(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          route_name: "/api/form/dashboard",
+          route_type: "GET",
+          auth0ID: req.auth.payload.sub,
+          role: "Admin",
+        })
+      );
     } else {
       const auth0ID = req.auth.payload.sub;
       const userClaims = await formRepository.allClaimsForUser(auth0ID);
@@ -28,6 +38,16 @@ formRouter.get("/dashboard", checkJwt, async (req, res, next) => {
         return decodeData(claim);
       });
       res.json({ claims: decodedClaims, role: null });
+      // Logging
+      console.info(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          route_name: "/api/form/dashboard",
+          route_type: "GET",
+          auth0ID: req.auth.payload.sub,
+          role: null,
+        })
+      );
     }
   } catch (err) {
     next(err);
@@ -68,6 +88,7 @@ formRouter.post("/", checkJwt, dataValidate, async (req, res, next) => {
           route_name: "/api/form",
           route_type: "POST",
           claim_id: postClaimsForm.claim_id,
+          auth0ID: auth0ID,
         })
       );
       res.status(201).json(postClaimsForm);
@@ -87,6 +108,15 @@ formRouter.put("/profile", checkJwt, async (req, res, next) => {
 
     const user = await formRepository.updateUser(auth0ID, req.body);
     res.json(user);
+    // Logging
+    console.info(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        route_name: "/api/form/profile",
+        route_type: "PUT",
+        auth0ID: auth0ID,
+      })
+    );
   } catch (err) {
     console.error(err);
     next(err);
@@ -100,6 +130,7 @@ formRouter.put(
   async (req, res, next) => {
     const { status } = req.body;
     const { claim_id } = req.params;
+    const auth0ID = req.auth.payload.sub;
 
     try {
       const updatedClaim = await formRepository.updateClaimStatus(
@@ -107,6 +138,16 @@ formRouter.put(
         status
       );
       res.json(updatedClaim);
+      // Logging
+      console.info(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          route_name: "/api/form/:claim_id",
+          route_type: "PUT",
+          claim_id: claim_id,
+          auth0ID: auth0ID,
+        })
+      );
     } catch (err) {
       next(err);
     }
@@ -119,6 +160,16 @@ formRouter.get("/profile", checkJwt, async (req, res, next) => {
     const user = await formRepository.getUserByAuth0ID(auth0ID);
     const userObject = decodeData(user);
     res.json(userObject);
+
+    // Logging
+    console.info(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        route_name: "/api/form/profile",
+        route_type: "GET",
+        auth0ID: auth0ID,
+      })
+    );
   } catch (err) {
     next(err);
   }
