@@ -75,7 +75,7 @@ const InputForm = () => {
           alert("Duplicate Entry, You have already filed this claim.");
           return resetForm();
         }
-        if (error.message === "Validation failed") {
+        if (error.error === "Validation failed") {
           alert("Validation Failed, Please check your details and try again");
           return resetForm();
         } else {

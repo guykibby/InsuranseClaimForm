@@ -67,10 +67,11 @@ formRouter.post("/", checkJwt, validateInput, async (req, res, next) => {
       // check if user exists in database
       const auth0ID = req.auth.payload.sub;
       const user = await formRepository.getUserByAuth0ID(auth0ID);
-
+      // console.log(req.body);
+      console.log(user);
       // check if user has same customer ID and Policy ID in request body
       if (
-        user.customer_id !== req.body.customerid ||
+        user.customerid !== req.body.customer_id ||
         user.userpolicies.includes(req.body.policy_number) === false
       ) {
         return res.status(400).json({ error: "Validation failed" });
@@ -106,6 +107,7 @@ formRouter.put("/profile", checkJwt, validateEdits, async (req, res, next) => {
   try {
     const auth0ID = req.auth.payload.sub;
     req.body = encodeData(req.body);
+    console.log(req.body);
 
     const user = await formRepository.updateUser(auth0ID, req.body);
     res.json(user);
@@ -133,9 +135,6 @@ formRouter.put(
     const { status } = req.body;
     const { claim_id } = req.params;
     const auth0ID = req.auth.payload.sub;
-    console.log(claim_id);
-    console.log(status);
-
     try {
       const updatedClaim = await formRepository.updateClaimStatus(
         claim_id,
