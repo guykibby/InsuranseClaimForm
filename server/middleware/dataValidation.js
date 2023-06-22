@@ -17,4 +17,24 @@ const validateInput = celebrate({
   }),
 });
 
-module.exports = validateInput;
+const validateEdits = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    policy_number: Joi.string().pattern(/^\d{8}$/),
+    customer_id: Joi.string(),
+    condition_claimed_for: Joi.string(),
+    first_symptoms_date: Joi.date().iso(),
+    symptoms_details: Joi.string(),
+    medical_service_type: Joi.string(),
+    service_provider_name: Joi.string(),
+    other_insurance_provider: Joi.boolean(),
+    status: Joi.string(),
+    consent: Joi.boolean(),
+    captcha: Joi.string(),
+    address: Joi.string(),
+    emailaddress: Joi.string().email(),
+    phonenumber: Joi.string(),
+    nextofkin: Joi.string(),
+  }),
+});
+
+module.exports = { validateInput, validateEdits };
