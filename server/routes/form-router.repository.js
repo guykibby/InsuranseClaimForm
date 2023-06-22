@@ -89,8 +89,6 @@ module.exports = {
     try {
       const key = Object.keys(userData)[0];
       const value = userData[key];
-      console.log(key);
-      console.log(value);
       if (
         key === "CustomerID" ||
         key === "UserPolicies" ||

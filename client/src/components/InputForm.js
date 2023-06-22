@@ -34,7 +34,6 @@ const InputForm = () => {
   };
 
   const onChange = (value) => {
-    console.log(value);
     setCaptchaValue(value);
   };
 

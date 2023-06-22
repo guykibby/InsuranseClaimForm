@@ -93,7 +93,6 @@ const InputForm = () => {
                 ) : (
                   <>
                     {profileData[key]}
-                    {console.log(key)}
                     <button
                       onClick={() => handleEditClick(key, profileData[key])}
                       className="btn-profile-edit"
