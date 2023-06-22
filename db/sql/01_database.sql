@@ -23,9 +23,9 @@ CREATE TABLE
     status claim_status DEFAULT 'submitted',
     policy_number CHAR(8) CHECK (policy_number SIMILAR TO '[0-9]{8}'),
     customer_id VARCHAR NOT NULL,
-    condition_claimed_for TEXT NOT NULL,
+    condition_claimed_for VARCHAR NOT NULL,
     first_symptoms_date DATE NOT NULL,
-    symptoms_details TEXT NOT NULL,
+    symptoms_details VARCHAR NOT NULL,
     medical_service_type VARCHAR(255) NOT NULL,
     service_provider_name VARCHAR(255) NOT NULL,
     other_insurance_provider BOOLEAN DEFAULT false,
@@ -42,7 +42,7 @@ CREATE TABLE Users (
     EmailAddress TEXT,
     PhoneNumber TEXT,
     NextOfKin TEXT,
-    PreExistingMedicalConditions TEXT[],
+    PreExistingMedicalConditions TEXT,
     BankAccountNumber TEXT,
     UserPolicies CHAR(8)[]
 );

@@ -35,14 +35,14 @@ const EditClaim = ({ claim }) => {
         type="button"
         className="btn btn-warning"
         data-toggle="modal"
-        data-target={`#id${claim.customer_id}`}
+        data-target={`#id${claim.claim_id}`}
       >
         Review
       </button>
 
       <div
         className="modal"
-        id={`id${claim.customer_id}`}
+        id={`id${claim.claim_id}`}
         onClick={() => setStatus(claim.status)}
       >
         <div className="modal-dialog">
