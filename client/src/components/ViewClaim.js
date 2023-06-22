@@ -1,45 +1,52 @@
+import { useState } from "react";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
+
 const ViewClaim = ({ claim }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-warning"
-        data-toggle="modal"
-        data-target={`#id${claim.claim_id}`}
-      >
+      <button type="button" className="btn btn-warning" onClick={openModal}>
         View Claim
       </button>
 
-      <div className="modal" id={`id${claim.claim_id}`}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Review Claim</h4>
-              <button type="button" className="close" data-dismiss="modal">
-                &times;
-              </button>
-            </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="View Claim"
+      >
+        <h4>Review Claim</h4>
+        <button className="close" onClick={closeModal}>
+          &times;
+        </button>
 
-            <div className="modal-body">
-              <h2>Claim Details</h2>
-
-              {Object.keys(claim).map((key) => (
-                <p key={key}>{`${key}: ${claim[key]}`}</p>
-              ))}
-            </div>
-
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn-modal-close"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+        <div className="modal-body">
+          <h2>Claim Details</h2>
+          {Object.keys(claim).map((key) => (
+            <p key={key}>{`${key}: ${claim[key]}`}</p>
+          ))}
         </div>
-      </div>
+
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn-modal-close"
+            onClick={closeModal}
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };

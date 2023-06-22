@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const EditClaim = ({ claim }) => {
   const [status, setStatus] = useState(claim.status);
   const { getAccessTokenSilently } = useAuth0();
   const statusOptions = ["submitted", "in progress", "approved", "denied"];
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const updateStatus = async (e) => {
     e.preventDefault();
@@ -23,83 +27,74 @@ const EditClaim = ({ claim }) => {
         }
       );
 
+      closeModal();
       window.location = "/dashboard";
     } catch (err) {
       console.error(err.message);
     }
   };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setStatus(claim.status);
+  };
+
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-warning"
-        data-toggle="modal"
-        data-target={`#id${claim.claim_id}`}
-      >
+      <button type="button" className="btn btn-warning" onClick={openModal}>
         Review
       </button>
 
-      <div
-        className="modal"
-        id={`id${claim.claim_id}`}
-        onClick={() => setStatus(claim.status)}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Review Claim"
       >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Review Claim</h4>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                onClick={() => setStatus(claim.status)}
-              >
-                &times;
-              </button>
-            </div>
+        <h4>Review Claim</h4>
+        <button className="close" onClick={closeModal}>
+          &times;
+        </button>
 
-            <div className="modal-body">
-              <h2>Claim Details</h2>
-
-              {Object.keys(claim).map((key) => (
-                <p key={key}>{`${key}: ${claim[key]}`}</p>
-              ))}
-              <select
-                id="status"
-                className="form-control"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                {statusOptions.map((statusOption) => (
-                  <option key={statusOption} value={statusOption}>
-                    {statusOption}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-warning"
-                data-dismiss="modal"
-                onClick={(e) => updateStatus(e)}
-              >
-                Save Change
-              </button>
-              <button
-                type="button"
-                className="btn-modal-close"
-                data-dismiss="modal"
-                onClick={() => setStatus(claim.status)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
+        <div className="modal-body">
+          <h2>Claim Details</h2>
+          {Object.keys(claim).map((key) => (
+            <p key={key}>{`${key}: ${claim[key]}`}</p>
+          ))}
+          <select
+            id="status"
+            className="form-control"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            {statusOptions.map((statusOption) => (
+              <option key={statusOption} value={statusOption}>
+                {statusOption}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
+
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-warning"
+            onClick={updateStatus}
+          >
+            Save Change
+          </button>
+          <button
+            type="button"
+            className="btn-modal-close"
+            onClick={closeModal}
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };
