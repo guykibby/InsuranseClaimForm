@@ -29,41 +29,13 @@ M.
 
 ##
 
-<summary>Architecture Diagram</summary>
+<summary>User Flow Diagram</summary>
 
-![img](diagrams/architecture-diagram.png)
+![img](img/User_Flow_Diagram.png)
 
+<summary>Threat Assessment Diagram</summary>
+
+![img](img/Threat_Assessment_Diagram__C2_.jpeg)
 ##
 
-<summary>ER Diagram</summary>
-Example JSON for POSTING to [api/form](http://localhost:5001/api/form):
-
-{		
-	"policy_number": "12345678",
-	"customer_id": "CUST001",
-	"condition_claimed_for": "Backpain",
-	"first_symptoms_date": "2022-01-01T00:00:00.000Z",
-	"symptoms_details": "Experienced sharp pain while lifting heavy object",
-	"medical_service_type": "Physical therapy",
-	"service_provider_name": "ABC Medical Center",
-	"other_insurance_provider": false,
-	"consent": true
-}
-
-Example response JSON from API
-
-{
-	"claim_id": "3906815876",
-	"status": "submitted",
-	"policy_number": "12345678",
-	"customer_id": "CUST001",
-	"condition_claimed_for": "Backpain",
-	"first_symptoms_date": "2022-01-01T00:00:00.000Z",
-	"symptoms_details": "Experienced sharp pain while lifting heavy object",
-	"medical_service_type": "Physical therapy",
-	"service_provider_name": "ABC Medical Center",
-	"other_insurance_provider": false,
-	"consent": true,
-	"created_at": "2023-05-14T10:24:49.907Z"
-}
 
