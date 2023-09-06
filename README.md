@@ -24,11 +24,27 @@ React tests in client folder:
 
 # Features of note:
 
+Client side Auth0 route protection with scope handling
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/App.js
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/auth/auth0-provider-with-navigate.js
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/components/dashboard.js
+
 CAPTCHA
-- [[htt](https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/images/PrivacyStatement.pdf)](https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/components/InputForm.js)
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/components/InputForm.js
+
+API - logging, validation, encoding, JWT route protection
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/server/routes/form-router.js
+
+CORS
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/server/app.js
+
+CSP
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/public/index.html
 
 Privacy Statement
-- [htt](https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/images/PrivacyStatement.pdf)
+- https://github.com/guykibby/InsuranseClaimForm/blob/main/client/src/images/PrivacyStatement.pdf
+
+  
 ##
 
 <summary>User Flow Diagram</summary>
